@@ -29,11 +29,16 @@ class Login extends React.Component {
     });
   };
 
+  handleConfigurações = () => {
+    const { history } = this.props;
+    history.push('/Configuracao');
+  };
+
   handlePlay = async () => {
     const { history } = this.props;
     const data = await requestFromAPI();
     const { name, email } = this.state;
-    console.log(data.token);
+    console.log(data);
     localStorage.setItem('token', data.token);
     localStorage.setItem('name', name);
     localStorage.setItem('email', email);
@@ -72,6 +77,12 @@ class Login extends React.Component {
               onClick={ this.handlePlay }
             >
               Play
+            </button>
+            <button
+              onClick={ this.handleConfigurações }
+              data-testid="btn-settings"
+            >
+              Configurações
             </button>
           </form>
         </div>
