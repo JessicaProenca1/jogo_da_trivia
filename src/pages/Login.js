@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import logo from '../trivia.png';
+// import logo from '../trivia.png';
 import '../App.css';
 
 class Login extends React.Component {
@@ -15,7 +15,7 @@ class Login extends React.Component {
   checkEmail = ({ target }) => {
     const { value } = target;
     this.setState({
-      email: value,
+      // email: value,
       emailCheck: this.isValidEmail(value),
     });
   };
@@ -24,7 +24,7 @@ class Login extends React.Component {
     const { value = 'a' } = target;
     const minLength = 3;
     this.setState({
-      name: value,
+      // name: value,
       nameCheck: value.length >= minLength,
     });
   };
@@ -69,7 +69,7 @@ class Login extends React.Component {
   }
 }
 Login.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.func.isRequired,
+  // dispatch: PropTypes.func.isRequired,
+  // history: PropTypes.func.isRequired,
 };
 export default connect()(Login);
