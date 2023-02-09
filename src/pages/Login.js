@@ -31,14 +31,14 @@ class Login extends React.Component {
 
   handleConfigurações = () => {
     const { history } = this.props;
-    history.push('/configuração');
+    history.push('/Configuracao');
   };
 
   handlePlay = async () => {
     const { history } = this.props;
     const data = await requestFromAPI();
     const { name, email } = this.state;
-    console.log(data.token);
+    console.log(data);
     localStorage.setItem('token', data.token);
     localStorage.setItem('name', name);
     localStorage.setItem('email', email);
