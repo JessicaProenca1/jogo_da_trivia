@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import md5 from 'crypto-js/md5';
+import { connect } from 'react-redux';
 
 class Header extends Component {
   state = {
@@ -29,4 +30,4 @@ class Header extends Component {
     );
   }
 }
-export default Header;
+export default connect()(Header);
