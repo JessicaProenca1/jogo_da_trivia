@@ -10,11 +10,25 @@ export default class Game extends Component {
     apiResponse: false,
     correct: '',
     wrong: '',
+    isDisable: false,
   };
 
   componentDidMount() {
     this.gameStart();
   }
+
+  setTimeout = () => {
+    const time = 30000;
+    setTimeout(this.setTimer, time);
+  };
+
+  setTimer = () => {
+    this.setState({
+      isDisable: true,
+    });
+  };
+
+  stopTimer = () => { clearTimeout(this.setTimeout); };
 
   gameStart = async () => {
     const { history } = this.props;
@@ -29,7 +43,6 @@ export default class Game extends Component {
       dataResults: data.results,
       apiResponse: true,
     });
-    console.log(data.results);
   };
 
   handleClick = () => {
@@ -37,19 +50,17 @@ export default class Game extends Component {
       correct: 'correct-answer',
       wrong: 'wrong-answer',
     });
+    this.stopTimer();
+    this.setState({
+      isDisable: true,
+    });
   };
 
   render() {
-    const { dataResults, apiResponse, correct, wrong } = this.state;
+    this.setTimeout();
+    const { dataResults, apiResponse, correct, wrong, isDisable } = this.state;
     const result = dataResults[0];
     const magicNumber = 0.5;
-    if (apiResponse) {
-      const answer = [
-        result.correct_answer,
-        ...result.incorrect_answers,
-      ].sort(() => Math.random() - magicNumber);
-      console.log(answer);
-    }
     return (
       <div>
         <div>
@@ -79,6 +90,7 @@ export default class Game extends Component {
                       key={ index }
                       className={ correct }
                       onClick={ this.handleClick }
+                      disabled={ isDisable }
                     >
                       {(answeer)}
                     </button>)
@@ -89,6 +101,7 @@ export default class Game extends Component {
                       className={ wrong }
                       key={ index }
                       onClick={ this.handleClick }
+                      disabled={ isDisable }
                     >
                       {(answeer)}
                     </button>)
