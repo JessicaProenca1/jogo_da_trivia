@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import requestFromAPI from '../api/apiRequest';
 import '../App.css';
+import { addLoginInfo } from '../redux/actions/mainAction';
 
 class Login extends React.Component {
   state = {
@@ -35,13 +36,14 @@ class Login extends React.Component {
   };
 
   handlePlay = async () => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
     const data = await requestFromAPI();
     const { name, email } = this.state;
     console.log(data);
     localStorage.setItem('token', data.token);
     localStorage.setItem('name', name);
     localStorage.setItem('email', email);
+    dispatch(addLoginInfo(name, email));
     history.push('/game');
   };
 
@@ -92,5 +94,6 @@ class Login extends React.Component {
 }
 Login.propTypes = {
   history: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 export default connect()(Login);

@@ -2,16 +2,36 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import requestApiToGame from '../api/apiRequestToGame';
 import Header from '../components/Header';
+import './Game.css';
 
 export default class Game extends Component {
   state = {
     dataResults: [],
     apiResponse: false,
+    correct: '',
+    wrong: '',
+    isDisable: false,
+    isAnswered: false,
+    questionNumber: 0,
   };
 
   componentDidMount() {
     this.gameStart();
   }
+
+  setTimeout = () => {
+    const time = 30000;
+    setTimeout(this.setTimer, time);
+  };
+
+  setTimer = () => {
+    this.setState({
+      isDisable: true,
+      isAnswered: true,
+    });
+  };
+
+  stopTimer = () => { clearTimeout(this.setTimeout); };
 
   gameStart = async () => {
     const { history } = this.props;
@@ -26,20 +46,48 @@ export default class Game extends Component {
       dataResults: data.results,
       apiResponse: true,
     });
-    console.log(data.results);
+  };
+
+  handleClick = () => {
+    this.setState({
+      correct: 'correct-answer',
+      wrong: 'wrong-answer',
+    });
+    this.stopTimer();
+    this.setState({
+      isDisable: true,
+      isAnswered: true,
+    });
+  };
+
+  handleAddScore = () => {
+    this.handleClick();
+  };
+
+  handleNext = () => {
+    const { questionNumber } = this.state;
+    this.setState({
+      isDisable: false,
+      isAnswered: false,
+      questionNumber: questionNumber + 1,
+      correct: '',
+      wrong: '',
+    });
   };
 
   render() {
-    const { dataResults, apiResponse } = this.state;
-    const result = dataResults[0];
+    this.setTimeout();
+    const {
+      dataResults,
+      apiResponse,
+      correct,
+      wrong,
+      isDisable,
+      isAnswered,
+      questionNumber } = this.state;
+    const result = dataResults[questionNumber];
     const magicNumber = 0.5;
-    if (apiResponse) {
-      const answer = [
-        result.correct_answer,
-        ...result.incorrect_answers,
-      ].sort(() => Math.random() - magicNumber);
-      console.log(answer);
-    }
+    const maxQuestionNumber = 4;
     return (
       <div>
         <div>
@@ -67,6 +115,9 @@ export default class Game extends Component {
                       type="button"
                       data-testid="correct-answer"
                       key={ index }
+                      className={ correct }
+                      onClick={ this.handleAddScore }
+                      disabled={ isDisable }
                     >
                       {(answeer)}
                     </button>)
@@ -74,13 +125,28 @@ export default class Game extends Component {
                     <button
                       type="button"
                       data-testid={ `wrong-answer-${index}` }
+                      className={ wrong }
                       key={ index }
+                      onClick={ this.handleClick }
+                      disabled={ isDisable }
                     >
                       {(answeer)}
                     </button>)
               ))}
             </div>
           </div>)}
+        {isAnswered
+        && questionNumber < maxQuestionNumber
+        && (
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={ this.handleNext }
+          >
+            Next
+
+          </button>
+        )}
       </div>
     );
   }
