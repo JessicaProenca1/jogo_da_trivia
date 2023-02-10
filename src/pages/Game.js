@@ -11,6 +11,8 @@ export default class Game extends Component {
     correct: '',
     wrong: '',
     isDisable: false,
+    isAnswered: false,
+    questionNumber: 0,
   };
 
   componentDidMount() {
@@ -25,6 +27,7 @@ export default class Game extends Component {
   setTimer = () => {
     this.setState({
       isDisable: true,
+      isAnswered: true,
     });
   };
 
@@ -53,14 +56,34 @@ export default class Game extends Component {
     this.stopTimer();
     this.setState({
       isDisable: true,
+      isAnswered: true,
+    });
+  };
+
+  handleNext = () => {
+    const { questionNumber } = this.state;
+    this.setState({
+      isDisable: false,
+      isAnswered: false,
+      questionNumber: questionNumber + 1,
+      correct: '',
+      wrong: '',
     });
   };
 
   render() {
     this.setTimeout();
-    const { dataResults, apiResponse, correct, wrong, isDisable } = this.state;
-    const result = dataResults[0];
+    const {
+      dataResults,
+      apiResponse,
+      correct,
+      wrong,
+      isDisable,
+      isAnswered,
+      questionNumber } = this.state;
+    const result = dataResults[questionNumber];
     const magicNumber = 0.5;
+    const maxQuestionNumber = 4;
     return (
       <div>
         <div>
@@ -108,6 +131,18 @@ export default class Game extends Component {
               ))}
             </div>
           </div>)}
+        {isAnswered
+        && questionNumber < maxQuestionNumber
+        && (
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={ this.handleNext }
+          >
+            Next
+
+          </button>
+        )}
       </div>
     );
   }
