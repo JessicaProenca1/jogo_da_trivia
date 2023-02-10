@@ -60,6 +60,10 @@ export default class Game extends Component {
     });
   };
 
+  handleAddScore = () => {
+    this.handleClick();
+  };
+
   handleNext = () => {
     const { questionNumber } = this.state;
     this.setState({
@@ -112,7 +116,7 @@ export default class Game extends Component {
                       data-testid="correct-answer"
                       key={ index }
                       className={ correct }
-                      onClick={ this.handleClick }
+                      onClick={ this.handleAddScore }
                       disabled={ isDisable }
                     >
                       {(answeer)}
