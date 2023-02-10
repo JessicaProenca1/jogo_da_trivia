@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import requestApiToGame from '../api/apiRequestToGame';
+import Header from '../components/Header';
 
 export default class Game extends Component {
   state = {
@@ -41,6 +42,11 @@ export default class Game extends Component {
     }
     return (
       <div>
+        <div>
+          {' '}
+          <Header />
+          {' '}
+        </div>
         {apiResponse
         && (
           <div>
