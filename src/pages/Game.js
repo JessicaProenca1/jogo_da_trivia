@@ -89,7 +89,6 @@ class Game extends Component {
     const { score, count, assertions } = this.state;
     const baseScore = 10;
     const hardScore = 3;
-    console.log(difficulty);
     if (difficulty === 'easy') {
       this.setState({
         score: score + baseScore + (count * 1),
