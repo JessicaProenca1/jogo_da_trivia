@@ -60,8 +60,12 @@ export default class Game extends Component {
     });
   };
 
+  getTimeLeft = () => {
+  };
+
   handleAddScore = () => {
     this.handleClick();
+    this.getTimeLeft();
   };
 
   handleNext = () => {
@@ -73,6 +77,22 @@ export default class Game extends Component {
       correct: '',
       wrong: '',
     });
+  };
+
+  setFinalState = () => {
+    this.setState({
+      isDisable: false,
+      isAnswered: false,
+      questionNumber: 0,
+      correct: '',
+      wrong: '',
+    });
+  };
+
+  handleNextToFeedback = () => {
+    const { history } = this.props;
+    this.setFinalState();
+    history.push('/feedback');
   };
 
   render() {
@@ -142,6 +162,18 @@ export default class Game extends Component {
             type="button"
             data-testid="btn-next"
             onClick={ this.handleNext }
+          >
+            Next
+
+          </button>
+        )}
+        {isAnswered
+        && questionNumber === maxQuestionNumber
+        && (
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={ this.handleNextToFeedback }
           >
             Next
 
