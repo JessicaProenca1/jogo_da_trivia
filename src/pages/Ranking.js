@@ -6,11 +6,11 @@ export default class Ranking extends Component {
     const { history } = this.props;
     return (
       <main>
-        <div
+        <h1
           data-testid="ranking-title"
         >
           Ranking
-        </div>
+        </h1>
         <button
           data-testid="btn-go-home"
           onClick={ () => history.push('/') }
