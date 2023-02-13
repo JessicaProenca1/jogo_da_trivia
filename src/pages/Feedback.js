@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
 class Feedback extends Component {
-  acertosJogador = (assertions) => {
+  acertosJogador = () => {
+    const { assertions } = this.props;
     const acertos = 3;
     if (assertions < acertos) {
       return 'Could be better...';
@@ -23,7 +24,7 @@ class Feedback extends Component {
         <h1
           data-testid="feedback-text"
         >
-          {() => this.acertosJogador(assertions)}
+          { this.acertosJogador() }
         </h1>
         <h2
           data-testid="feedback-total-score"
@@ -38,7 +39,7 @@ class Feedback extends Component {
         <button
           data-testid="btn-play-again"
           type="button"
-          onClick={ () => history.push('/game') }
+          onClick={ () => history.push('/') }
         >
           Play Again
         </button>

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import requestApiToGame from '../api/apiRequestToGame';
 import Header from '../components/Header';
-import { addScore } from '../redux/actions/mainAction';
+import { addScore, sendAssertions } from '../redux/actions/mainAction';
 import './Game.css';
 
 class Game extends Component {
@@ -18,6 +18,7 @@ class Game extends Component {
     count: 30,
     stop: false,
     score: 0,
+    assertions: 0,
   };
 
   componentDidMount() {
@@ -85,7 +86,7 @@ class Game extends Component {
   };
 
   handleAddScore = (difficulty) => {
-    const { score, count } = this.state;
+    const { score, count, assertions } = this.state;
     const baseScore = 10;
     const hardScore = 3;
     console.log(difficulty);
@@ -105,6 +106,9 @@ class Game extends Component {
       });
     }
     this.handleClick();
+    this.setState({
+      assertions: assertions + 1,
+    });
   };
 
   handleNext = () => {
@@ -131,8 +135,10 @@ class Game extends Component {
   };
 
   handleNextToFeedback = () => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    const { assertions } = this.state;
     this.setFinalState();
+    dispatch(sendAssertions(assertions));
     history.push('/feedback');
   };
 
