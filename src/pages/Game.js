@@ -59,12 +59,10 @@ class Game extends Component {
   };
 
   handleClick = () => {
+    this.stopTimer();
     this.setState({
       correct: 'correct-answer',
       wrong: 'wrong-answer',
-    });
-    this.stopTimer();
-    this.setState({
       isDisable: true,
       isAnswered: true,
     });
