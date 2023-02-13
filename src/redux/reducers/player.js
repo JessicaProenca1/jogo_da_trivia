@@ -1,5 +1,6 @@
 const ADD_LOGIN_INFO = 'ADD_LOGIN_INFO';
 const ADD_SCORE = 'ADD_SCORE';
+const SEND_ASSERTIONS = 'SEND_ASSERTIONS';
 
 const INITIAL_STATE = {
   name: '',
@@ -19,6 +20,11 @@ const player = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       score: action.payload,
+    };
+  case SEND_ASSERTIONS:
+    return {
+      ...state,
+      assertions: action.payload,
     };
   default:
     return state;

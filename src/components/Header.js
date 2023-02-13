@@ -21,7 +21,7 @@ class Header extends Component {
           { nome }
         </span>
         <span data-testid="header-score">
-          { ` Placar: ${score}`}
+          {score}
         </span>
       </header>
     );
