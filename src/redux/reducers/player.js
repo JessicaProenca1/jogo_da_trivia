@@ -1,4 +1,5 @@
 const ADD_LOGIN_INFO = 'ADD_LOGIN_INFO';
+const ADD_SCORE = 'ADD_SCORE';
 
 const INITIAL_STATE = {
   name: '',
@@ -13,6 +14,11 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.payload.name,
       gravatarEmail: action.payload.email,
+    };
+  case ADD_SCORE:
+    return {
+      ...state,
+      score: action.payload,
     };
   default:
     return state;

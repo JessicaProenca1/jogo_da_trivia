@@ -32,7 +32,7 @@ class Login extends React.Component {
 
   handleConfigurações = () => {
     const { history } = this.props;
-    history.push('/Configuracao');
+    history.push('/settings');
   };
 
   handlePlay = async () => {

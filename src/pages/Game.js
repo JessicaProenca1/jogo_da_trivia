@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import requestApiToGame from '../api/apiRequestToGame';
 import Header from '../components/Header';
+import { addScore } from '../redux/actions/mainAction';
 import './Game.css';
 
-export default class Game extends Component {
+class Game extends Component {
   state = {
     dataResults: [],
     apiResponse: false,
@@ -13,25 +15,33 @@ export default class Game extends Component {
     isDisable: false,
     isAnswered: false,
     questionNumber: 0,
+    count: 30,
+    stop: false,
+    score: 0,
   };
 
   componentDidMount() {
     this.gameStart();
+    this.setTimeout();
+  }
+
+  componentDidUpdate() {
+    const { dispatch } = this.props;
+    const { score } = this.state;
+    dispatch(addScore(score));
   }
 
   setTimeout = () => {
-    const time = 30000;
-    setTimeout(this.setTimer, time);
+    const time = 1000;
+    setInterval(this.timer, time);
   };
 
-  setTimer = () => {
+  stopTimer = () => {
+    clearTimeout(this.setTimeout);
     this.setState({
-      isDisable: true,
-      isAnswered: true,
+      stop: true,
     });
   };
-
-  stopTimer = () => { clearTimeout(this.setTimeout); };
 
   gameStart = async () => {
     const { history } = this.props;
@@ -60,12 +70,43 @@ export default class Game extends Component {
     });
   };
 
-  getTimeLeft = () => {
+  timer = () => {
+    const { count, stop } = this.state;
+    this.setState({
+      count: count - 1,
+    });
+    if (count < 0 || stop) {
+      const mil = 1000;
+      clearInterval(this.timer, mil);
+      this.setState({
+        isDisable: true,
+        isAnswered: true,
+        count,
+      });
+    }
   };
 
-  handleAddScore = () => {
+  handleAddScore = (difficulty) => {
+    const { score, count } = this.state;
+    const baseScore = 10;
+    const hardScore = 3;
+    console.log(difficulty);
+    if (difficulty === 'easy') {
+      this.setState({
+        score: score + baseScore + (count * 1),
+      });
+    }
+    if (difficulty === 'medium') {
+      this.setState({
+        score: score + baseScore + (count * 2),
+      });
+    }
+    if (difficulty === 'hard') {
+      this.setState({
+        score: score + baseScore + (count * hardScore),
+      });
+    }
     this.handleClick();
-    this.getTimeLeft();
   };
 
   handleNext = () => {
@@ -76,6 +117,8 @@ export default class Game extends Component {
       questionNumber: questionNumber + 1,
       correct: '',
       wrong: '',
+      stop: false,
+      count: 30,
     });
   };
 
@@ -96,7 +139,6 @@ export default class Game extends Component {
   };
 
   render() {
-    this.setTimeout();
     const {
       dataResults,
       apiResponse,
@@ -136,7 +178,7 @@ export default class Game extends Component {
                       data-testid="correct-answer"
                       key={ index }
                       className={ correct }
-                      onClick={ this.handleAddScore }
+                      onClick={ () => this.handleAddScore(result.difficulty) }
                       disabled={ isDisable }
                     >
                       {(answeer)}
@@ -185,7 +227,8 @@ export default class Game extends Component {
 }
 
 Game.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+  history: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
+
+export default connect()(Game);

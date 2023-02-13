@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 
 class Header extends Component {
-  state = {
-    placar: 0,
-  };
-
   render() {
     const nome = localStorage.getItem('name');
     const email = localStorage.getItem('email');
     const hashGerada = md5(email).toString();
     const url = `https://www.gravatar.com/avatar/${hashGerada}`;
-    const { placar } = this.state;
+    const { score } = this.props;
     return (
       <header>
         <img
@@ -24,10 +21,19 @@ class Header extends Component {
           { nome }
         </span>
         <span data-testid="header-score">
-          { ` Placar: ${placar}`}
+          { ` Placar: ${score}`}
         </span>
       </header>
     );
   }
 }
-export default connect()(Header);
+
+const mapStateToProps = (state) => ({
+  score: state.player.score,
+});
+
+Header.propTypes = {
+  score: PropTypes.number.isRequired,
+};
+
+export default connect(mapStateToProps)(Header);
